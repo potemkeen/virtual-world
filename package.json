@@ -1,0 +1,26 @@
+{
+  "name": "virtual-world",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "browserslist": ["> 0.5%", "last 2 versions", "not dead"],
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/potemkeen/virtual-world.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/potemkeen/virtual-world/issues"
+  },
+  "homepage": "https://github.com/potemkeen/virtual-world#readme",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "parcel": "^2.11.0"
+  }
+}
