@@ -1,6 +1,6 @@
 import { Segment } from './segment';
 import { Point } from './point';
-import { average, getIntersection, getRandomColor } from '../math/utils';
+import { add, average, getIntersection, getRandomColor } from '../math/utils';
 
 export class Polygon {
     constructor(points) {
@@ -11,6 +11,14 @@ export class Polygon {
                 new Segment(points[i - 1], points[i % points.length])
             );
         }
+    }
+
+    static offset(poly, point) {
+        const points = [];
+        for (let i = 0; i < poly.points.length; i++) {
+            points.push(add(poly.points[i], point));
+        }
+        return new Polygon(points);
     }
 
     static union(polys) {
@@ -104,11 +112,17 @@ export class Polygon {
         }
     }
 
-    draw(ctx, {stroke = 'blue', lineWidth = 2, fill = 'rgba(0, 0, 255, 0.3)'} = {}) {
+    draw(ctx, {
+        stroke = 'blue',
+        lineWidth = 2,
+        fill = 'rgba(0, 0, 255, 0.3)',
+        join = 'miter',
+    } = {}) {
         ctx.beginPath();
         ctx.fillStyle = fill;
         ctx.strokeStyle = stroke;
         ctx.lineWidth = lineWidth;
+        ctx.lineJoin = join;
         ctx.moveTo(this.points[0].x, this.points[0].y);
         for (let i = 1; i < this.points.length; i++) {
             ctx.lineTo(this.points[i].x, this.points[i].y);

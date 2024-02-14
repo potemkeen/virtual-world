@@ -2,6 +2,7 @@ import { Graph } from './math/graph';
 import { GraphEditor } from './graph-editor';
 import { Viewport } from './viewport';
 import { World } from './world';
+import { scale } from './math/utils';
 
 const canvas = document.getElementById('canvas');
 const disposeBtn = document.getElementById('dispose');
@@ -34,7 +35,8 @@ function animate() {
         world.generate();
         oldGraphHash = graph.hash();
     }
-    world.draw(ctx);
+    const viewPoint = scale(viewport.getOffset(), -1);
+    world.draw(ctx, viewPoint);
     ctx.globalAlpha = 0.3;
     graphEditor.display();
     requestAnimationFrame(animate);
