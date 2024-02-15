@@ -9,6 +9,7 @@ export class Start extends Marking {
 
         this.img = new Image();
         this.img.src = car;
+        this.type = 'start';
     }
 
     draw(ctx) {

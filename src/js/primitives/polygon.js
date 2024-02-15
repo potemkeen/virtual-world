@@ -13,6 +13,12 @@ export class Polygon {
         }
     }
 
+    static load(info) {
+        return new Polygon(
+            info.points.map((p) => new Point(p.x, p.y))
+        );
+    }
+
     static offset(poly, point) {
         const points = [];
         for (let i = 0; i < poly.points.length; i++) {

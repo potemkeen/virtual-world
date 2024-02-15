@@ -12,7 +12,8 @@ h1 {
     background-color: #2a5;
 }
 
-button {
+button, .file-input-label {
+    display: inline-block;
     background-color: white;
     font-size: 20px;
     padding: 5px 7px 7px 5px;
@@ -25,4 +26,8 @@ button {
 button.off {
     background-color: grey;
     filter: grayscale(100%);
+}
+
+input[type="file"] {
+    display: none;
 }

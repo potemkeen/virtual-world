@@ -1,7 +1,6 @@
 import { Graph } from './math/graph';
 import { GraphEditor } from './editors/graph-editor';
 import { Viewport } from './viewport';
-import { World } from './world';
 import { scale } from './math/utils';
 import { StopEditor } from './editors/stop-editor';
 import { CrossingEditor } from './editors/crossing-editor';
@@ -10,6 +9,7 @@ import { YieldEditor } from './editors/yield-editor';
 import { ParkingEditor } from './editors/parking-editor';
 import { TargetEditor } from './editors/target-editor';
 import { LightEditor } from './editors/light-editor';
+import { World } from './world';
 
 const editors = {
     graph: GraphEditor,
@@ -25,22 +25,24 @@ const editors = {
 const canvas = document.getElementById('canvas');
 const disposeBtn = document.getElementById('dispose');
 const saveBtn = document.getElementById('save');
+const fileInput = document.getElementById('file-input');
 
 disposeBtn.addEventListener('click', dispose);
 saveBtn.addEventListener('click', save);
+fileInput.addEventListener('change', load);
 
 canvas.width = 600;
 canvas.height = 600;
 
 const ctx = canvas.getContext('2d');
 
-const graphString = localStorage.getItem('graph');
-const graphInfo = graphString ? JSON.parse(graphString) : null;
+const worldString = localStorage.getItem('world');
+const worldInfo = worldString ? JSON.parse(worldString) : null;
+let world = worldInfo ? World.load(worldInfo) : new World(new Graph());
+const graph = world.graph;
 
-const graph = graphInfo ? Graph.load(graphInfo) : new Graph();
-const world = new World(graph);
+const viewport = new Viewport(canvas, world.zoom, world.offset);
 
-const viewport = new Viewport(canvas);
 const tools = {};
 for (const title in editors) {
     const btn = document.getElementById(title);
@@ -75,8 +77,40 @@ function dispose() {
     world.markings.length = 0;
 }
 
+function load() {
+    const file = event.target.files[0];
+
+    if (!file) {
+        alert('No file selected!');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onload = (event) => {
+        const fileContent = event.target.result;
+        const jsonData = JSON.parse(fileContent);
+        world = World.load(jsonData);
+        localStorage.setItem('world', JSON.stringify(world));
+        location.reload();
+    }
+}
+
 function save() {
-    localStorage.setItem('graph', JSON.stringify(graph));
+    world.zoom = viewport.zoom;
+    world.offset = viewport.offset;
+
+    const element = document.createElement('a');
+    element.setAttribute(
+        'href',
+        `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(world))}`
+    );
+    const fileName = 'name.world';
+    element.setAttribute('download', fileName);
+    element.click();
+
+    localStorage.setItem('world', JSON.stringify(world));
 }
 
 function setMode(mode) {

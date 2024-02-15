@@ -6,6 +6,8 @@ import { Point } from './primitives/point';
 import { Tree } from './items/tree';
 import { Building } from './items/building';
 import { Light } from './markings/light';
+import { Graph } from './math/graph';
+import { createMarking } from './markings/marking-factory';
 
 export class World {
     constructor(
@@ -36,6 +38,26 @@ export class World {
         this.frameCount = 0;
 
         this.generate();
+    }
+
+    static load(info) {
+        const world = new World(new Graph());
+        world.graph = Graph.load(info.graph);
+        world.roadWidth = info.roadWidth;
+        world.roadRoundness = info.roadRoundness;
+        world.buildingWidth = info.buildingWidth;
+        world.buildingMinLength = info.buildingMinLength;
+        world.spacing = info.spacing;
+        world.treeSize = info.treeSize;
+        world.envelopes = info.envelopes.map(Envelope.load);
+        world.roadBorders = info.roadBorders.map((b) => new Segment(b.p1, b.p2));
+        world.buildings = info.buildings.map(Building.load);
+        world.trees = info.trees.map((t) => new Tree(new Point(t.center.x, t.center.y), info.treeSize));
+        world.laneGuides = info.laneGuides.map((g) => new Segment(g.p1, g.p2));
+        world.markings = info.markings.map(createMarking);
+        world.zoom = info.zoom;
+        world.offset = info.offset;
+        return world;
     }
 
     generate() {

@@ -3,6 +3,7 @@ import { Marking } from './marking';
 export class Target extends Marking {
     constructor(center, directionVector, width, height) {
         super(center, directionVector, width, height);
+        this.type = 'target';
     }
 
     draw(ctx) {

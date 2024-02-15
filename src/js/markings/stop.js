@@ -6,6 +6,7 @@ export class Stop extends Marking {
         super(center, directionVector, width, height);
 
         this.border = this.poly.segments[2];
+        this.type = 'stop';
     }
 
     draw(ctx) {
